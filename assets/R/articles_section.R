@@ -24,12 +24,12 @@ articles_section <- function(bib = "data/cv.bib", author = NULL, page_break_afte
 
   if (page_break_after) {
     c(
-      sprintf("## Publications (%s) {data-icon=newspaper .break-after-me}", articles_count),
+      sprintf("## Publications  {data-icon=newspaper .break-after-me}"),
       text
     )
   } else {
     c(
-      sprintf("## Publications (%s) {data-icon=newspaper}", articles_count),
+      sprintf("## Publications  {data-icon=newspaper}"),
       text
     )
   }
