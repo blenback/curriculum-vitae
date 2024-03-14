@@ -96,6 +96,7 @@ img {
 #aside {
   position: relative; /* for disclaimer */
   height: var(--content-area-height);
+  line-height: 80%;
 }
 
 .aside {
@@ -105,6 +106,7 @@ img {
   float: right;
   position: absolute;
   right: 0;
+  line-height: 0.75;
 }
 
 /* main */

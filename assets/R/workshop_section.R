@@ -3,7 +3,7 @@ workshop_section <- function(xlsx = "data/cv.xlsx", sheet = "workshop", page_bre
     i = .N:1,
     j = sprintf(
       "### %s\n\n%s\n\n%s\n\n%s\n\n::: aside\n%s\n:::\n\n\n\n",
-      title, type, city, date, add_github_logo(url, colour)
+      title, type, city, date, add_item_logo(url, type = "github", colour)
     )
   ]
 
@@ -13,3 +13,4 @@ workshop_section <- function(xlsx = "data/cv.xlsx", sheet = "workshop", page_bre
     c(sprintf("## Workshop Experience  {data-icon=chalkboard-teacher}"), text)
   }
 }
+

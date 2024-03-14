@@ -2,6 +2,7 @@ sidebar <- function(
   png = "pictures/cv.png",
   contact = contact_section(),
   skills = skills_section(),
+  languages = languages_section(),
   disclaimer = disclaimer_section()
 ) {
   cat(
@@ -11,7 +12,8 @@ sidebar <- function(
      "```",
     contact,
     skills,
+    languages,
     disclaimer,
-    sep = "\n\n"
+    sep = "\n"
   )
 }

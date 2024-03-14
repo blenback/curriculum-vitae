@@ -3,7 +3,7 @@ awards_section <- function(xlsx = "data/cv.xlsx", sheet = "awards", page_break_a
     i = .N:1,
     j = sprintf(
       "### %s\n\n%s\n\n%s\n\n%s\n\n%s\n\n::: aside\n%s\n:::\n\n\n\n",
-      name, institute, city, date, description, add_github_logo(url, colour)
+      name, institute, city, date, description, add_item_logo(url, type = link_type, colour)
     )
   ]
 

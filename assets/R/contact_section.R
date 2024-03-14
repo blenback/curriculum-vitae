@@ -35,3 +35,4 @@ contact_section <- function(xlsx = "data/cv.xlsx", sheet = "contact", colour = "
     )
   ]
 }
+
