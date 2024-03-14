@@ -8,7 +8,7 @@ title: '`r sprintf("%s - Curriculum Vitæ", params[["author"]])`'
 author: '`r params[["author"]]`'
 output:
   pagedown::html_resume:
-    #self_contained: true
+    self_contained: true
     mathjax: null
     css: "assets/cv.css"
 #knit: pagedown::chrome_print
