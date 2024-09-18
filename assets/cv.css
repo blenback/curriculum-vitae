@@ -335,7 +335,7 @@ h1, h2 {
 #main li::before {
   position: relative;
   margin-left: -4.25pt;
-  content: '• ';
+  content: '??? ';
 }
 
 .aside li::before {

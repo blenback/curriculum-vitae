@@ -1,7 +1,9 @@
 #devtools::install_github("ropensci/bib2df")
 library(bib2df)
 
-articles_section <- function(bib = "data/cv.bib", author = "Black", page_break_after = FALSE) {
+articles_section <- function(bib = "data/cv.bib",
+                             author = "Black",
+                             page_break_after = FALSE) {
 
   #read the bib tex file
   articles <- bib2df(bib)
@@ -17,7 +19,7 @@ articles_section <- function(bib = "data/cv.bib", author = "Black", page_break_a
   #               title,author,       year,             journal,doi,
 
    base_str <- "### %s\n\n%s\n\nN/A\n\n%s\n\n *%s*\n\n::: aside\n\n%s\n\n:::"
-  # #             title,author,place(NA),year, journal              oi 
+  # #             title,author,place(NA),year, journal              doi 
   
 
   #loop over entries formatting as C string
@@ -86,11 +88,37 @@ articles_section <- function(bib = "data/cv.bib", author = "Black", page_break_a
     c_str <- do.call(sprintf, c(fmt = base_str, fields))
   } else if(length(custom_fields) != 0){
     
-    #add spacing entries between each itme in custom entries
-    for(i in 1:length(custom_entries)){
-      custom_entries <- append(custom_entries, custom_entries[i], after = i)
-      custom_entries[[i]] <- c(" ")
-    }
+    # #add spacing entries between each item in custom entries
+    # for(i in 1:length(custom_entries)){
+    #   custom_entries <- append(custom_entries, custom_entries[i], after = i)
+    #   custom_entries[[i]] <- c(" ")
+    # }
+    
+    # Between each entry of custom_entries add a new line
+    # New line before 1st entry
+    # No new line after the last entry
+    
+    custom_entries <- unlist(lapply(custom_entries, function(x) c("\n", x)))
+    
+    # convert back to list
+    custom_entries <- as.list(custom_entries)
+    
+    # create a vector of names by adding 'break' before the entries of custom_fields
+    names(custom_entries) <- unlist(sapply(custom_fields, function(x) c("break", x)))
+    
+  
+    # #add new line entries between each item in custom entries
+    # for(i in 1:length(custom_entries)){
+    #   if(i == 1){
+    #     custom_entries <- append(custom_entries, custom_entries[i], after = i)
+    #     custom_entries[[i]] <- c("\n")
+    #     names(custom_entries)[i] <- "break"
+    #   } else if(i > 1){
+    #     custom_entries <- append(custom_entries, custom_entries[i], after = i)
+    #     custom_entries[[i]] <- c("\n")
+    #     names(custom_entries)[i] <- "break"
+    #   }
+    # }
     
       #modify the aide portion of the string to remove the closing elements. 
       #base_str <- gsub("aside\n\n*[%s](%s)*\n:::", "aside\n*[%s](%s)*\n\n", base_str, fixed = TRUE)
@@ -99,8 +127,9 @@ articles_section <- function(bib = "data/cv.bib", author = "Black", page_break_a
       base_str <- gsub("aside\n\n%s\n\n:::", "aside\n\n%s\n", base_str, fixed = TRUE)
       
       #add string for each entry in custom fields
-      for(i in 1:length(custom_fields)){
-        base_str <- paste0(base_str, "%3s%s\n")
+      for(i in 1:length(custom_entries)){
+        #base_str <- paste0(base_str, "%3s%s\n")
+        base_str <- paste0(base_str, "%s\n")
       }
 
       #add the closing portion back to the string

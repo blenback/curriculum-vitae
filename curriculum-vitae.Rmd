@@ -3,7 +3,7 @@ params:
   author: "Benjamin Black"
   xlsx: "data/cv.xlsx"
   bib: "data/cv.bib"
-  picture: "data/cv.png"
+  picture: "data/cv_new.png"
 title: '`r sprintf("%s - Curriculum Vitæ", params[["author"]])`'
 author: '`r params[["author"]]`'
 output:
