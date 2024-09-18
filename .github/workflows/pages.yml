@@ -2,12 +2,12 @@
 name: Deploy CV to Pages
 
 on:
+  workflow_dispatch:
   push:
-    branches: ["main"]
+    branches: main
     paths:
       - data/**
       - curriculum-vitae.Rmd
-  workflow_dispatch:
 
 permissions:
   contents: read
