@@ -11,7 +11,7 @@ output:
     self_contained: true
     mathjax: null
     css: "assets/cv.css"
-knit: pagedown::chrome_print
+# knit: pagedown::chrome_print
     
 ---
 
