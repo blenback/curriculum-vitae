@@ -1,6 +1,6 @@
 ---
 params:
-  author: "Benjamin Black"
+  author: "Dr. Benjamin Black"
   github_repo: "blenback/profi"
   branch: "main"
   picture: "data/cv_new.png"
