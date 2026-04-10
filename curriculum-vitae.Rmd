@@ -1,8 +1,6 @@
 ---
 params:
   author: "Benjamin Black"
-  github_repo: "blenback/profi"
-  branch: "main"
   picture: "assets/cv_new.png"
 title: '`r sprintf("%s - Curriculum Vitæ", params[["author"]])`'
 author: '`r params[["author"]]`'
@@ -12,11 +10,13 @@ output:
     mathjax: null
     css: "cv.css"
 knit: pagedown::chrome_print
-    
 ---
 
 ```{r}
 #| include: false
+
+# Load config
+cv_config <- yaml::read_yaml("config.yaml")
 
 # Set knitr options
 knitr::opts_chunk$set(
@@ -52,9 +52,9 @@ knitr::include_graphics(params[["picture"]])
 message("🚀 CV Rendering Started")
 message(
   "📡 Data Source: Remote GitHub repository - ",
-  params[["github_repo"]],
+  cv_config$cv_data_repo,
   " (branch: ",
-  params[["branch"]],
+  cv_config$cv_data_branch,
   ")"
 )
 message("📄 Fallback: Local files in data/sections/ (if GitHub unavailable)")
@@ -66,66 +66,69 @@ message(paste(rep("=", 60), collapse = ""))
 # Comment out sections that you do not want to include
 cat(
   contact_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]]
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch
   ),
   skills_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]]
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch
   ),
   languages_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]]
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch
   ),
   title_section(author = params[["author"]]),
   profil_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]]
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch
   ),
   education_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]],
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch,
     page_break_after = FALSE,
     include_sections = c("thesis", "awards")
   ),
   experience_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]],
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch,
     page_break_after = FALSE,
     use_bullets = FALSE,
-    reverse_order = FALSE
+    reverse_order = FALSE,
+    max_entries = cv_config$max_entries$experience
   ),
   workshop_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]],
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch,
     page_break_after = FALSE,
     colour = "#333333"
   ),
   awards_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]],
-    page_break_after = FALSE,
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch,
+    page_break_after = TRUE,
     colour = "#333333"
   ),
   articles_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]],
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch,
     page_break_after = FALSE,
-    colour = "#333333"
+    colour = "#333333",
+    max_entries = cv_config$max_entries$articles
   ),
   presentations_section(
-    github_repo = params[["github_repo"]],
-    branch = params[["branch"]],
+    github_repo = cv_config$cv_data_repo,
+    branch = cv_config$cv_data_branch,
     page_break_after = FALSE,
-    colour = "#333333"
+    colour = "#333333",
+    max_entries = cv_config$max_entries$presentations
   ),
   # poster_section(
-  #   github_repo = params[["github_repo"]],
-  #   branch = params[["branch"]],
+  #   github_repo = cv_config$cv_data_repo,
+  #   branch = cv_config$cv_data_branch,
   #   page_break_after = FALSE,
   #   colour = "#333333"
   # ),
-  # packages_section(github_repo = params[["github_repo"]], branch = params[["branch"]], page_break_after = FALSE),
+  # packages_section(github_repo = cv_config$cv_data_repo, branch = cv_config$cv_data_branch, page_break_after = FALSE),
   disclaimer_section(text = NULL),
   sep = "\n"
 )

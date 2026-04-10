@@ -26,7 +26,8 @@ read_cv_data_remote <- function(github_repo, section, branch = "main") {
     },
     error = function(e) {
       # Fallback to local file if GitHub fails
-      local_file <- paste0("data/sections/", section, ".yaml")
+      config <- yaml::read_yaml("config.yaml")
+      local_file <- paste0(config$local_data_dir, "/", section, ".yaml")
       if (file.exists(local_file)) {
         message("⚠️  GitHub failed for '", section, "' - using local fallback")
         message("   📁 Local file: ", local_file)
@@ -49,4 +50,3 @@ read_cv_data_remote <- function(github_repo, section, branch = "main") {
     }
   )
 }
-

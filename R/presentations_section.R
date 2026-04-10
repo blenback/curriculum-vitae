@@ -2,7 +2,8 @@ presentations_section <- function(
   github_repo = NULL,
   branch = "main",
   page_break_after = FALSE,
-  colour = "#333333"
+  colour = "#333333",
+  max_entries = NULL
 ) {
   presentations_data <- read_cv_data_remote(
     github_repo,
@@ -12,6 +13,10 @@ presentations_section <- function(
 
   # Reverse order (most recent first)
   presentations_data <- presentations_data[length(presentations_data):1]
+
+  if (!is.null(max_entries)) {
+    presentations_data <- presentations_data[seq_len(min(max_entries, length(presentations_data)))]
+  }
 
   # Create formatted entries - match actual YAML structure
   text <- sapply(

@@ -2,12 +2,17 @@ articles_section <- function(
   github_repo = NULL,
   branch = "main",
   page_break_after = FALSE,
-  colour = "#333333"
+  colour = "#333333",
+  max_entries = NULL
 ) {
   publications_data <- read_cv_data_remote(github_repo, "publications", branch)
 
   # Reverse order (most recent first)
   publications_data <- publications_data[length(publications_data):1]
+
+  if (!is.null(max_entries)) {
+    publications_data <- publications_data[seq_len(min(max_entries, length(publications_data)))]
+  }
 
   # Create formatted entries - match actual YAML structure
   text <- sapply(

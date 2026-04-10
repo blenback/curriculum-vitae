@@ -5,7 +5,7 @@ sidebar <- function(
 ) {
   # Load configuration if no repo specified
   if (is.null(github_repo)) {
-    config <- yaml::read_yaml("config/cv_config.yaml")
+    config <- yaml::read_yaml("config.yaml")
     github_repo <- config$cv_data_repo
     branch <- config$cv_data_branch
   }

@@ -3,12 +3,17 @@ experience_section <- function(
   branch = "main",
   page_break_after = FALSE,
   use_bullets = TRUE,
-  reverse_order = TRUE
+  reverse_order = TRUE,
+  max_entries = NULL
 ) {
   experience_data <- read_cv_data_remote(github_repo, "experience", branch)
 
   # Convert to data frame
   experience_df <- do.call(rbind, lapply(experience_data, as.data.frame))
+
+  if (!is.null(max_entries)) {
+    experience_df <- head(experience_df, max_entries)
+  }
 
   if (use_bullets) {
     # Use bullet points for activities

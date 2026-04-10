@@ -9,7 +9,13 @@ cv_data_branch: "main"
 use_local_fallback: true
 local_data_dir: "data/sections"
 
-# Section files 
+# Section display limits (set to null for no limit)
+max_entries:
+  experience: 6
+  articles: null
+  presentations: 5
+
+# Section files
 sections:
   contact: "contact.yaml"
   profile: "profile.yaml" 
