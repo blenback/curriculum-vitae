@@ -5,7 +5,7 @@
 #' @param branch Branch name (default is "main").
 #' @param colour The color of the icons (default is "#333333").
 #' @return A character vector containing the formatted contact section.
-contact_section_remote <- function(
+contact_section <- function(
   github_repo = NULL,
   branch = "main",
   colour = "#333333"

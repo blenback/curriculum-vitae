@@ -1,4 +1,4 @@
-workshop_section_remote <- function(
+workshop_section <- function(
   github_repo = NULL,
   branch = "main",
   page_break_after = FALSE,

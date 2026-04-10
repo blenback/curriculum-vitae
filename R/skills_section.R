@@ -1,4 +1,4 @@
-skills_section_remote <- function(github_repo = NULL, branch = "main") {
+skills_section <- function(github_repo = NULL, branch = "main") {
   skills_data <- read_cv_data_remote(github_repo, "skills", branch)
 
   # Convert list to data.table-like structure

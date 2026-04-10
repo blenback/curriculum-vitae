@@ -1,4 +1,4 @@
-poster_section_remote <- function(
+poster_section <- function(
   github_repo = NULL,
   branch = "main",
   page_break_after = FALSE,

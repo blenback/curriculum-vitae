@@ -1,4 +1,4 @@
-education_section_remote <- function(
+education_section <- function(
   github_repo = NULL,
   branch = "main",
   page_break_after = FALSE,

@@ -1,4 +1,4 @@
-packages_section_remote <- function(
+packages_section <- function(
   github_repo = NULL,
   branch = "main",
   page_break_after = FALSE,

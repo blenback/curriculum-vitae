@@ -1,4 +1,4 @@
-profil_section_remote <- function(
+profil_section <- function(
   github_repo = NULL,
   branch = "main",
   use_headings = TRUE

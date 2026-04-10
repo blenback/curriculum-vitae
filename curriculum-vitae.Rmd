@@ -3,14 +3,14 @@ params:
   author: "Benjamin Black"
   github_repo: "blenback/profi"
   branch: "main"
-  picture: "data/cv_new.png"
+  picture: "assets/cv_new.png"
 title: '`r sprintf("%s - Curriculum Vitæ", params[["author"]])`'
 author: '`r params[["author"]]`'
 output:
   pagedown::html_resume:
     self_contained: true
     mathjax: null
-    css: "assets/cv.css"
+    css: "cv.css"
 knit: pagedown::chrome_print
     
 ---
@@ -31,7 +31,7 @@ knitr::opts_chunk$set(
 # Load functions for each section
 invisible(sapply(
   X = list.files(
-    path = file.path("assets", "R"),
+    path = file.path("R"),
     pattern = "\\.R$",
     full.names = TRUE
   ),
@@ -65,67 +65,67 @@ message(paste(rep("=", 60), collapse = ""))
 # Print contents of all sections using remote GitHub functions
 # Comment out sections that you do not want to include
 cat(
-  contact_section_remote(
+  contact_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]]
   ),
-  skills_section_remote(
+  skills_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]]
   ),
-  languages_section_remote(
+  languages_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]]
   ),
   title_section(author = params[["author"]]),
-  profil_section_remote(
+  profil_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]]
   ),
-  education_section_remote(
+  education_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]],
     page_break_after = FALSE,
     include_sections = c("thesis", "awards")
   ),
-  experience_section_remote(
+  experience_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]],
     page_break_after = FALSE,
     use_bullets = FALSE,
     reverse_order = FALSE
   ),
-  workshop_section_remote(
+  workshop_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]],
     page_break_after = FALSE,
     colour = "#333333"
   ),
-  awards_section_remote(
+  awards_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]],
     page_break_after = FALSE,
     colour = "#333333"
   ),
-  articles_section_remote(
+  articles_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]],
     page_break_after = FALSE,
     colour = "#333333"
   ),
-  presentations_section_remote(
+  presentations_section(
     github_repo = params[["github_repo"]],
     branch = params[["branch"]],
     page_break_after = FALSE,
     colour = "#333333"
   ),
-  # poster_section_remote(
+  # poster_section(
   #   github_repo = params[["github_repo"]],
   #   branch = params[["branch"]],
   #   page_break_after = FALSE,
   #   colour = "#333333"
   # ),
-  # packages_section_remote(github_repo = params[["github_repo"]], branch = params[["branch"]], page_break_after = FALSE),
+  # packages_section(github_repo = params[["github_repo"]], branch = params[["branch"]], page_break_after = FALSE),
   disclaimer_section(text = NULL),
   sep = "\n"
 )
