@@ -15,5 +15,5 @@ languages_section <- function(github_repo = NULL, branch = "main") {
     USE.NAMES = FALSE
   )
 
-  paste0("## Languages {#skills}\n\n", paste(text, collapse = "\n"), "\n\n")
+  paste0("## Languages {#languages}\n\n", paste(text, collapse = "\n"), "\n\n")
 }

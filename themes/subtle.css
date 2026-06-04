@@ -1,0 +1,33 @@
+/* ============================================================
+   Theme: SUBTLE  (light touch)
+   Near-white warm paper, very light sidebar. Keeps the brand
+   fonts + forest/burnt accents but stays restrained and uses
+   the least ink when printed.
+   Selected via config.yaml `theme: subtle` (or CV_THEME=subtle).
+   ============================================================ */
+:root {
+  --cv-page-bg:        #FCFBF7;
+  --cv-sidebar-bg:     #F3EFE6;
+  --cv-text:           var(--bb-ink-soft);
+  --cv-heading:        var(--bb-ink);
+  --cv-primary:        var(--bb-forest);
+  --cv-accent:         var(--bb-burnt);
+  --cv-date:           var(--bb-forest);
+  --cv-muted:          var(--bb-ink-faint);
+  --cv-rule:           rgba(43, 38, 32, .14);
+  --cv-link:           var(--bb-forest);
+  --cv-link-hover:     var(--bb-burnt);
+  --cv-dot:            var(--bb-forest);
+  --cv-dot-ring:       #FCFBF7;
+  --cv-picture-ring:   var(--bb-forest);
+  --cv-code:           var(--bb-burnt-deep);
+
+  --cv-sidebar-text:    var(--bb-ink);
+  --cv-sidebar-heading: var(--bb-forest);
+  --cv-sidebar-label:   var(--bb-forest);
+  --cv-sidebar-link:    var(--bb-ink);
+  --cv-sidebar-muted:   var(--bb-ink-faint);
+
+  --cv-viewer-bg:     #E7E2D6;
+  --cv-viewer-shadow: rgba(43, 38, 32, .25);
+}

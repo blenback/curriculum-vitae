@@ -2,8 +2,13 @@
 # This file contains configuration for accessing CV data from GitHub
 
 # GitHub repository settings
-cv_data_repo: "blenback/profi"  
+cv_data_repo: "blenback/profi"
 cv_data_branch: "main"
+
+# Visual theme (Ben Black brand). One of: warm | forest | subtle
+# Override at render time without editing this file via the CV_THEME env var,
+# e.g. CV_THEME=forest. See themes/<name>.css and README.
+theme: subtle
 
 # Local fallback settings
 use_local_fallback: true

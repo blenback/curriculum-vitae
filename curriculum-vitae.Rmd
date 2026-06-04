@@ -18,6 +18,34 @@ knit: pagedown::chrome_print
 # Load config
 cv_config <- yaml::read_yaml("config.yaml")
 
+# ---- Visual theme selection (Ben Black brand) -------------------------------
+# Priority: CV_THEME env var > config.yaml `theme:` > "warm".
+# Each theme is a stylesheet in themes/<name>.css that overrides the --cv-*
+# tokens in cv.css; it is injected as a <style> block below so it can be picked
+# at render time without touching the YAML header.
+cv_theme <- Sys.getenv("CV_THEME", unset = "")
+if (cv_theme == "") {
+  cv_theme <- if (!is.null(cv_config$theme)) cv_config$theme else "warm"
+}
+cv_theme <- tolower(trimws(cv_theme))
+valid_themes <- c("warm", "forest", "subtle")
+if (!cv_theme %in% valid_themes) {
+  warning(sprintf("Unknown CV theme '%s'; falling back to 'subtle'.", cv_theme))
+  cv_theme <- "subtle"
+}
+
+# Icon colours: FontAwesome icons are rendered as inline SVG with a baked-in
+# fill, so CSS can't recolour them -- they must be set here per theme.
+# `sidebar` = contact icons (forest sidebar is dark, so they go light);
+# `main`    = link icons next to publications/talks/workshops (always on cream).
+theme_icons <- list(
+  warm   = list(sidebar = "#36513C", main = "#36513C"),
+  forest = list(sidebar = "#DAC6A0", main = "#36513C"),
+  subtle = list(sidebar = "#2B2620", main = "#36513C")
+)
+sidebar_icon_colour <- theme_icons[[cv_theme]]$sidebar
+main_icon_colour    <- theme_icons[[cv_theme]]$main
+
 # Set knitr options
 knitr::opts_chunk$set(
   results = "asis",
@@ -42,7 +70,22 @@ invisible(sapply(
 # Aside
 
 ```{r}
-#| out.extra: 'style="width: 226px;" id="picture"'
+#| results: asis
+# Inject the selected theme stylesheet. It loads after cv.css (which holds the
+# structure + "warm" defaults), so its --cv-* token overrides win the cascade.
+theme_css_path <- file.path("themes", paste0(cv_theme, ".css"))
+if (file.exists(theme_css_path)) {
+  cat(
+    "<style id=\"cv-theme\" data-theme=\"", cv_theme, "\">\n",
+    paste(readLines(theme_css_path, warn = FALSE), collapse = "\n"),
+    "\n</style>\n",
+    sep = ""
+  )
+}
+```
+
+```{r}
+#| out.extra: 'style="width: 180px;" id="picture"'
 knitr::include_graphics(params[["picture"]])
 ```
 
@@ -67,7 +110,8 @@ message(paste(rep("=", 60), collapse = ""))
 cat(
   contact_section(
     github_repo = cv_config$cv_data_repo,
-    branch = cv_config$cv_data_branch
+    branch = cv_config$cv_data_branch,
+    colour = sidebar_icon_colour
   ),
   skills_section(
     github_repo = cv_config$cv_data_repo,
@@ -100,26 +144,26 @@ cat(
     github_repo = cv_config$cv_data_repo,
     branch = cv_config$cv_data_branch,
     page_break_after = FALSE,
-    colour = "#333333"
+    colour = main_icon_colour
   ),
   awards_section(
     github_repo = cv_config$cv_data_repo,
     branch = cv_config$cv_data_branch,
     page_break_after = TRUE,
-    colour = "#333333"
+    colour = main_icon_colour
   ),
   articles_section(
     github_repo = cv_config$cv_data_repo,
     branch = cv_config$cv_data_branch,
     page_break_after = FALSE,
-    colour = "#333333",
+    colour = main_icon_colour,
     max_entries = cv_config$max_entries$articles
   ),
   presentations_section(
     github_repo = cv_config$cv_data_repo,
     branch = cv_config$cv_data_branch,
     page_break_after = FALSE,
-    colour = "#333333",
+    colour = main_icon_colour,
     max_entries = cv_config$max_entries$presentations
   ),
   # poster_section(

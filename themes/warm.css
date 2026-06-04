@@ -1,0 +1,32 @@
+/* ============================================================
+   Theme: WARM  (default)
+   Cream paper + warm sand sidebar, forest-green section titles,
+   burnt-orange dates/dots/bullets. Mirrors the brand body area.
+   Selected via config.yaml `theme: warm` (or CV_THEME=warm).
+   Overrides the semantic --cv-* tokens defined in cv.css.
+   ============================================================ */
+:root {
+  --cv-page-bg:        var(--bb-cream);
+  --cv-sidebar-bg:     var(--bb-sand);
+  --cv-text:           var(--bb-ink-soft);
+  --cv-heading:        var(--bb-ink);
+  --cv-primary:        var(--bb-forest);
+  --cv-accent:         var(--bb-burnt);
+  --cv-muted:          var(--bb-ink-faint);
+  --cv-rule:           rgba(43, 38, 32, .18);
+  --cv-link:           var(--bb-forest);
+  --cv-link-hover:     var(--bb-burnt);
+  --cv-dot:            var(--bb-burnt);
+  --cv-dot-ring:       var(--bb-cream);
+  --cv-picture-ring:   var(--bb-forest);
+  --cv-code:           var(--bb-burnt-deep);
+
+  --cv-sidebar-text:    var(--bb-ink);
+  --cv-sidebar-heading: var(--bb-forest);
+  --cv-sidebar-label:   var(--bb-forest);
+  --cv-sidebar-link:    var(--bb-ink);
+  --cv-sidebar-muted:   var(--bb-ink-faint);
+
+  --cv-viewer-bg:     #2A2620;
+  --cv-viewer-shadow: rgba(0, 0, 0, .45);
+}
