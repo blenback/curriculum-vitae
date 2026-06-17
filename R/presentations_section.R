@@ -30,7 +30,7 @@ presentations_section <- function(
         "\n\n",
         entry$location,
         "\n\n",
-        entry$date,
+        format(as.Date(entry$date), "%b %Y"),
         "\n\n",
         "::: aside\n",
         if (!is.null(entry$url) && !is.na(entry$url) && entry$url != "") {
