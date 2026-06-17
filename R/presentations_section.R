@@ -22,6 +22,21 @@ presentations_section <- function(
   text <- sapply(
     presentations_data,
     function(entry) {
+      formatted_date <- tryCatch(
+        {
+          parsed_date <- as.Date(
+            entry$date,
+            tryFormats = c("%Y-%m-%d", "%b. %Y", "%b %Y")
+          )
+          if (is.na(parsed_date)) {
+            as.character(entry$date)
+          } else {
+            format(parsed_date, "%b %Y")
+          }
+        },
+        error = function(e) as.character(entry$date)
+      )
+
       paste0(
         "### ",
         entry$title,
@@ -30,7 +45,7 @@ presentations_section <- function(
         "\n\n",
         entry$location,
         "\n\n",
-        format(as.Date(entry$date), "%b %Y"),
+        formatted_date,
         "\n\n",
         "::: aside\n",
         if (!is.null(entry$url) && !is.na(entry$url) && entry$url != "") {
