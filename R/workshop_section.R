@@ -4,11 +4,11 @@ workshop_section <- function(
   page_break_after = FALSE,
   colour = "#333333"
 ) {
-  workshops_data <- read_cv_data_remote(github_repo, "workshops", branch)
+  events_data <- read_cv_data_remote(github_repo, "events", branch)
 
   # Create formatted entries - match the original format exactly
   text <- sapply(
-    workshops_data,
+    events_data,
     function(entry) {
       # Construct date string based on availability
       date_str <- if (!is.na(entry$start) && entry$start != "") {
@@ -43,7 +43,7 @@ workshop_section <- function(
     USE.NAMES = FALSE
   )
 
-  heading <- "## Teaching, Training & Workshop Delivery  {data-icon=chalkboard-teacher"
+  heading <- "## Teaching, Training & Session Convening  {data-icon=chalkboard-teacher"
   if (page_break_after) {
     heading <- paste0(heading, " .break-after-me")
   }

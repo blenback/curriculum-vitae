@@ -28,7 +28,7 @@ sections:
   languages: "languages.yaml"
   education: "education.yaml"
   experience: "experience.yaml"
-  workshops: "workshops.yaml"
+  events: "events.yaml"
   awards: "awards.yaml"
   publications: "publications.yaml"
   presentations: "presentations.yaml"
