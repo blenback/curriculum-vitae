@@ -24,7 +24,7 @@ poster_section <- function(
         entry$date,
         "\n\n",
         "::: aside\n",
-        if (!is.na(entry$url) && entry$url != "") {
+        if (!is.null(entry$url) && !is.na(entry$url) && entry$url != "") {
           add_github_logo(entry$url, colour)
         } else {
           ""

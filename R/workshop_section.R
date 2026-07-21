@@ -11,8 +11,10 @@ workshop_section <- function(
     events_data,
     function(entry) {
       # Construct date string based on availability
-      date_str <- if (!is.na(entry$start) && entry$start != "") {
-        if (!is.na(entry$end) && entry$end != "") {
+      date_str <- if (
+        !is.null(entry$start) && !is.na(entry$start) && entry$start != ""
+      ) {
+        if (!is.null(entry$end) && !is.na(entry$end) && entry$end != "") {
           paste0(entry$start, " - ", entry$end, "\n\n")
         } else {
           paste0(entry$start, "\n\n")
@@ -32,7 +34,7 @@ workshop_section <- function(
         "\n\n",
         date_str,
         "::: aside\n",
-        if (!is.na(entry$url) && entry$url != "") {
+        if (!is.null(entry$url) && !is.na(entry$url) && entry$url != "") {
           add_item_logo(entry$url, type = "website", colour)
         } else {
           ""

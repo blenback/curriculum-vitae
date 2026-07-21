@@ -143,13 +143,13 @@ cat(
   workshop_section(
     github_repo = cv_config$cv_data_repo,
     branch = cv_config$cv_data_branch,
-    page_break_after = FALSE,
+    page_break_after = TRUE,
     colour = main_icon_colour
   ),
   awards_section(
     github_repo = cv_config$cv_data_repo,
     branch = cv_config$cv_data_branch,
-    page_break_after = TRUE,
+    page_break_after = FALSE,
     colour = main_icon_colour
   ),
   articles_section(
