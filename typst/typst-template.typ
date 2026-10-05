@@ -42,8 +42,8 @@
 #let cv-label(body) = text(weight: 700, fill: cv-theme.sidebar-label, body)
 
 #let cv-item(icon, body) = block(
-  above: 0.62em,
-  below: 0.62em,
+  above: 0.85em,
+  below: 0.85em,
   grid(
     columns: (1.25em, 1fr),
     column-gutter: 0.45em,
@@ -52,9 +52,9 @@
   ),
 )
 
-#let cv-block(title: none, body) = block(above: 7mm, below: 0mm, width: 100%, {
+#let cv-block(title: none, body) = block(above: 9mm, below: 0mm, width: 100%, {
   block(
-    below: 2.6mm,
+    below: 3.2mm,
     text(
       weight: 700,
       size: 10.5pt,
@@ -63,7 +63,7 @@
       upper(title),
     ),
   )
-  set par(leading: 0.48em, spacing: 0.75em)
+  set par(leading: 0.56em, spacing: 0.95em)
   body
 })
 
@@ -101,7 +101,7 @@
     height: cv-dims.page-height,
     inset: (x: cv-dims.pad, top: 11mm, bottom: cv-dims.margin-y),
     {
-      set text(size: 8.2pt, fill: cv-theme.sidebar-text)
+      set text(size: 8.6pt, fill: cv-theme.sidebar-text)
       show link: set text(fill: cv-theme.sidebar-link)
       body
     },
@@ -110,9 +110,9 @@
 
 // ------------------------------------------------------- main column
 
-#let cv-header(name: none, profile: none) = block(below: 2mm, {
+#let cv-header(name: none, profile: none) = block(below: 3mm, {
   block(
-    below: 3mm,
+    below: 4mm,
     text(
       weight: 900,
       size: 23pt,
@@ -122,7 +122,7 @@
     ),
   )
   if profile != none {
-    set par(leading: 0.55em, justify: true)
+    set par(leading: 0.66em, justify: true)
     text(size: 8.4pt, profile)
   }
 })
@@ -133,8 +133,8 @@
 
 #let cv-section(title: none, icon: none, body) = {
   block(
-    above: 6.5mm,
-    below: 0.5mm,
+    above: 9mm,
+    below: 1.5mm,
     sticky: true,
     grid(
       columns: cv-columns,
@@ -208,7 +208,7 @@
     text(size: 8.8pt, weight: 700, fill: cv-theme.heading, title)
     if org != none or location != none {
       block(
-        above: 0.55em,
+        above: 0.75em,
         below: 0em,
         grid(
           columns: (1fr, auto),
@@ -225,9 +225,9 @@
       )
     }
     if body != none {
-      block(above: 0.75em, below: 0em, {
+      block(above: 1em, below: 0em, {
         set text(size: 7.7pt)
-        set par(leading: 0.5em, spacing: 0.6em)
+        set par(leading: 0.62em, spacing: 0.8em)
         body
       })
     }
@@ -241,8 +241,8 @@
       columns: cv-columns,
       stroke: (x, y) => if x == 2 { (left: 0.6pt + cv-theme.rule) },
       inset: (x, y) => (
-        top: 2.2mm,
-        bottom: 2.2mm,
+        top: 2.9mm,
+        bottom: 2.9mm,
         left: if x == 2 { cv-dims.rail } else { 0pt },
       ),
       date, [], details,
@@ -276,7 +276,7 @@
     fill: cv-theme.text,
     lang: lang,
   )
-  set par(leading: 0.5em, spacing: 0.7em)
+  set par(leading: 0.6em, spacing: 0.8em)
   set list(
     marker: text(fill: cv-theme.accent, weight: 700)[•],
     indent: 0.5mm,

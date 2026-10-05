@@ -7,8 +7,9 @@
 contact_section <- function(github_repo = NULL, branch = "main") {
   contact_data <- read_cv_data_remote(github_repo, "contact", branch)
 
-  # Obfuscate the visible address; the mailto: target stays usable
-  email_label <- gsub("\\.", "[dot]", sub("@", "[at]", contact_data$email))
+  # Obfuscate the visible address; the mailto: target stays usable. A
+  # zero-width space after [at] lets the long label wrap in the sidebar.
+  email_label <- gsub("\\.", "[dot]", sub("@", paste0("[at]", intToUtf8(0x200B)), contact_data$email))
 
   items <- c(
     cv_item("user", contact_data$position),

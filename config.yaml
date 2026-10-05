@@ -18,7 +18,7 @@ local_data_dir: "data/sections"
 max_entries:
   experience: 6
   articles: null
-  presentations: 5
+  presentations: null
 
 # Section files
 sections:
