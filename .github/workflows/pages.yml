@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       
       - name: Check for changes in remote CV data repository
         id: check-changes
@@ -67,38 +67,36 @@ jobs:
       - name: Setup Pages
         if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
         uses: actions/configure-pages@v4 #gets github page to update
-      - uses: r-lib/actions/setup-pandoc@v2 #sets up Pandoc
-        if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
       - uses: r-lib/actions/setup-r@v2 #sets up r
         if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
       - uses: r-lib/actions/setup-r-dependencies@v2 #sets up r packages and their dependencies
         if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
         with:
           packages: |
-            any::data.table
-            any::fontawesome
-            any::pagedown
-            any::readxl
-            any::bib2df
             any::yaml
-            any::httr
-            any::stringi
-      - name: Install Chrome for PDF rendering
+            any::knitr
+            any::rmarkdown
+      - uses: quarto-dev/quarto-actions/setup@v2 #sets up Quarto (bundles Pandoc + Typst)
+        if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
+
+      - name: Download brand fonts for the PDF
         if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
         run: |
-          wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
-          sudo sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google-chrome.list'
-          sudo apt-get update
-          sudo apt-get install -y google-chrome-stable
-      
-      - name: Render curriculum-vitae.Rmd to HTML
+          # Typst needs the font files; they are not committed (see .gitignore)
+          mkdir -p fonts
+          curl -sSfL -o satoshi.zip https://api.fontshare.com/v2/fonts/download/satoshi
+          unzip -q -j satoshi.zip 'Satoshi_Complete/Fonts/OTF/*.otf' -d fonts
+          rm satoshi.zip
+          for style in Regular Italic Medium MediumItalic SemiBold Bold BoldItalic; do
+            curl -sSfL -o "fonts/Spectral-$style.ttf" \
+              "https://github.com/google/fonts/raw/main/ofl/spectral/Spectral-$style.ttf"
+          done
+          ls fonts
+
+      - name: Render CV to HTML and PDF
         if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
-        run: Rscript -e 'rmarkdown::render("curriculum-vitae.Rmd", output_file = "index.html", output_dir = "docs")'
-      
-      - name: Render curriculum-vitae.Rmd to PDF
-        if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
-        run: Rscript -e 'pagedown::chrome_print("curriculum-vitae.Rmd", output = "docs/curriculum-vitae.pdf")'
-      
+        run: quarto render
+
       - name: Store remote SHA for next run
         if: steps.check-changes.outputs.changes_detected == 'true'
         run: |
@@ -114,7 +112,7 @@ jobs:
         if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'docs'
+          path: '_output'
       - name: Deploy to GitHub Pages
         if: github.event_name != 'schedule' || steps.check-changes.outputs.changes_detected == 'true'
         id: deployment

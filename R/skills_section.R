@@ -1,14 +1,13 @@
 skills_section <- function(github_repo = NULL, branch = "main") {
   skills_data <- read_cv_data_remote(github_repo, "skills", branch)
 
-  # Convert list to data.table-like structure
   skills_df <- data.frame(
     subject = sapply(skills_data, function(x) x$subject),
     level = sapply(skills_data, function(x) x$level),
     stringsAsFactors = FALSE
   )
 
-  # Group by level and create text
+  # Group by level: "Advanced: A, B and C"
   levels <- c("advanced", "intermediate", "basic")
   text_parts <- character(0)
 
@@ -26,19 +25,10 @@ skills_section <- function(github_repo = NULL, branch = "main") {
       }
       text_parts <- c(
         text_parts,
-        paste0(
-          '- <u style="color: var(--main-color);">*',
-          capitalise(level),
-          ':*</u> ',
-          what_text
-        )
+        paste0(cv_label(paste0(capitalise(level), ":")), " ", what_text)
       )
     }
   }
 
-  paste0(
-    "## Technical Skills {#skills}\n\n",
-    paste(text_parts, collapse = "\n"),
-    "\n\n"
-  )
+  cv_block("skills", "Technical Skills", paste(text_parts, collapse = "\n\n"))
 }

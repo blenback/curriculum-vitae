@@ -1,0 +1,40 @@
+project:
+  type: default
+  render:
+    - cv.qmd
+  # Renders land here (git-ignored); CI publishes the folder to GitHub Pages
+  output-dir: _output
+
+lang: en-GB
+
+execute:
+  echo: false
+  message: false
+  warning: false
+
+# filters/cv.lua maps the format-neutral CV Markdown to each format
+filters:
+  - filters/cv.lua
+
+# Quarto writes each output next to the .qmd before moving it to
+# output-dir, so the names must not clash with tracked files.
+format:
+  html:
+    output-file: index.html
+    minimal: true
+    # Served from GitHub Pages: fonts load from their CDNs and the portrait
+    # is a separate file (embedding inlined ~10 MB of fonts + image)
+    embed-resources: false
+    css: styles/cv.css
+    title-block-style: none
+    anchor-sections: false
+    link-external-newwindow: true
+  typst:
+    output-file: benjamin-black-cv.pdf
+    template-partials:
+      - typst/typst-template.typ
+      - typst/typst-show.typ
+    # Brand fonts for CI; locally installed fonts are found anyway
+    font-paths:
+      - fonts
+    keep-typ: false

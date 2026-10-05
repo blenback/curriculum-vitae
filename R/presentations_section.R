@@ -2,66 +2,38 @@ presentations_section <- function(
   github_repo = NULL,
   branch = "main",
   page_break_after = FALSE,
-  colour = "#333333",
   max_entries = NULL
 ) {
-  presentations_data <- read_cv_data_remote(
-    github_repo,
-    "presentations",
-    branch
-  )
+  presentations_data <- read_cv_data_remote(github_repo, "presentations", branch)
 
-  # Reverse order (most recent first)
-  presentations_data <- presentations_data[length(presentations_data):1]
+  # Most recent first
+  presentations_data <- rev(presentations_data)
 
   if (!is.null(max_entries)) {
-    presentations_data <- presentations_data[seq_len(min(max_entries, length(presentations_data)))]
+    presentations_data <- head(presentations_data, max_entries)
   }
 
-  # Create formatted entries - match actual YAML structure
-  text <- sapply(
-    presentations_data,
-    function(entry) {
-      formatted_date <- tryCatch(
-        {
-          parsed_date <- as.Date(
-            entry$date,
-            tryFormats = c("%Y-%m-%d", "%b. %Y", "%b %Y")
-          )
-          if (is.na(parsed_date)) {
-            as.character(entry$date)
-          } else {
-            format(parsed_date, "%b %Y")
-          }
-        },
-        error = function(e) as.character(entry$date)
-      )
+  entries <- lapply(presentations_data, function(entry) {
+    # Dates come as ISO ("2021-06-09") or already formatted ("Jun. 2021")
+    formatted_date <- tryCatch(
+      {
+        parsed_date <- as.Date(
+          entry$date,
+          tryFormats = c("%Y-%m-%d", "%b. %Y", "%b %Y")
+        )
+        if (is.na(parsed_date)) as.character(entry$date) else format(parsed_date, "%b %Y")
+      },
+      error = function(e) as.character(entry$date)
+    )
 
-      paste0(
-        "### ",
-        entry$title,
-        "\n\n",
-        entry$event,
-        "\n\n",
-        entry$location,
-        "\n\n",
-        formatted_date,
-        "\n\n",
-        "::: aside\n",
-        if (!is.null(entry$url) && !is.na(entry$url) && entry$url != "") {
-          add_item_logo(entry$url, colour, type = "presentation")
-        } else {
-          ""
-        },
-        "\n:::\n\n\n\n"
-      )
-    },
-    USE.NAMES = FALSE
-  )
+    cv_entry(
+      title = entry$title,
+      org = entry$event,
+      location = entry$location,
+      start = formatted_date,
+      links = list(cv_typed_link(entry$url, "presentation"))
+    )
+  })
 
-  if (page_break_after) {
-    c("## Presentations  {data-icon=comment-dots .break-after-me}", text)
-  } else {
-    c("## Presentations {data-icon=comment-dots}", text)
-  }
+  cv_section("presentations", "Presentations", "comment-dots", entries, page_break_after)
 }

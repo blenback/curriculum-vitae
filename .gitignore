@@ -5,3 +5,18 @@
 .DS_Store
 .planning
 preview/
+
+/.quarto/
+**/*.quarto_ipynb
+
+# Quarto
+/.quarto/
+/_output/
+/cv.typ
+/cv.pdf
+/index.html
+/index_files/
+# generated at render time by R/theme.R
+/typst/_theme.typ
+# brand fonts for Typst (downloaded in CI, see .github/workflows/pages.yml)
+/fonts/
