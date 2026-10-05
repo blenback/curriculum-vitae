@@ -1,83 +1,56 @@
 #' Contact Section (Remote)
-#' #' @description
-#' This function generates a contact section for a CV in R Markdown format using remote YAML data.
+#' @description
+#' Sidebar block with position, affiliation and contact links.
 #' @param github_repo GitHub repository in format "owner/repo".
 #' @param branch Branch name (default is "main").
-#' @param colour The color of the icons (default is "#333333").
-#' @return A character vector containing the formatted contact section.
-contact_section <- function(
-  github_repo = NULL,
-  branch = "main",
-  colour = "#333333"
-) {
+#' @return A Markdown string.
+contact_section <- function(github_repo = NULL, branch = "main") {
   contact_data <- read_cv_data_remote(github_repo, "contact", branch)
 
-  paste0(
-    "## Contact Info {#contact}\n",
-    "- ",
-    fontawesome::fa("user", fill = colour),
-    " ",
-    contact_data$position,
-    "\n",
-    "- ",
-    fontawesome::fa("building-columns", fill = colour),
-    " ",
-    contact_data$institute,
-    "\n",
-    "- ",
-    fontawesome::fa("map-location-dot", fill = colour),
-    " ",
-    contact_data$city,
-    "\n",
-    "- ",
-    fontawesome::fa("envelope", fill = colour),
-    " [",
-    gsub("\\.", "[dot]", sub("@", "[at]", contact_data$email)),
-    "](mailto:",
-    contact_data$email,
-    ")\n",
-    "- ",
-    fontawesome::fa("house", fill = colour),
-    " [",
-    sub("/$", "", sub("https*://", "", contact_data$website)),
-    "](",
-    contact_data$website,
-    ")\n",
-    "- ",
-    fontawesome::fa("orcid", fill = colour),
-    " [",
-    contact_data$orcid,
-    "](https://orcid.org/",
-    contact_data$orcid,
-    ")\n",
-    "- ",
-    fontawesome::fa("linkedin", fill = colour),
-    " [",
-    contact_data$linkedin,
-    "](https://www.linkedin.com/in/",
-    contact_data$linkedin,
-    ")\n",
-    "- ",
-    fontawesome::fa("github", fill = colour),
-    " [",
-    contact_data$github,
-    "](https://github.com/",
-    contact_data$github,
-    ")\n",
-    "- ",
-    fontawesome::fa("x-twitter", fill = colour),
-    " [",
-    contact_data$twitter,
-    "](https://twitter.com/",
-    contact_data$twitter,
-    ")\n",
-    "- ",
-    fontawesome::fa("researchgate", fill = colour),
-    " [",
-    contact_data$researchgate,
-    "](",
-    contact_data$researchgate,
-    ")\n",
-    "\n"
+  # Obfuscate the visible address; the mailto: target stays usable
+  email_label <- gsub("\\.", "[dot]", sub("@", "[at]", contact_data$email))
+
+  items <- c(
+    cv_item("user", contact_data$position),
+    cv_item("building-columns", contact_data$institute),
+    cv_item("map-location-dot", contact_data$city),
+    cv_item(
+      "envelope",
+      sprintf("[%s](mailto:%s)", gsub("([][])", "\\\\\\1", email_label), contact_data$email)
+    ),
+    cv_item(
+      "house",
+      sprintf(
+        "[%s](%s)",
+        sub("/$", "", sub("https*://", "", contact_data$website)),
+        contact_data$website
+      )
+    ),
+    cv_item(
+      "orcid",
+      sprintf("[%s](https://orcid.org/%s)", contact_data$orcid, contact_data$orcid)
+    ),
+    cv_item(
+      "linkedin",
+      sprintf(
+        "[%s](https://www.linkedin.com/in/%s)",
+        contact_data$linkedin,
+        contact_data$linkedin
+      )
+    ),
+    cv_item(
+      "github",
+      sprintf("[%s](https://github.com/%s)", contact_data$github, contact_data$github)
+    ),
+    cv_item(
+      "x-twitter",
+      sprintf("[%s](https://twitter.com/%s)", contact_data$twitter, contact_data$twitter)
+    ),
+    cv_item(
+      "researchgate",
+      sprintf("[ResearchGate](%s)", contact_data$researchgate)
+    )
   )
+
+  cv_block("contact", "Contact Info", items)
 }

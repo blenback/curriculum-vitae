@@ -1,0 +1,581 @@
+/* ==========================================================
+   CV web page (Quarto HTML output).
+
+   Markup comes from filters/cv.lua; colours come from the
+   --cv-* / --bb-* custom properties that R/theme.R injects from
+   themes/themes.yml (the defaults below are the "warm" theme, so
+   the page still renders if that block is missing).
+
+   The PDF is NOT printed from this page -- it is typeset separately
+   by Typst (typst/typst-template.typ).
+   ========================================================== */
+
+/* Fonts (Ben Black brand). Satoshi is not on Google Fonts -> it is
+   loaded from Fontshare. @import rules must come first. */
+@import url('https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,500;1,400;1,500&display=swap');
+@import url('https://api.fontshare.com/v2/css?f%5B%5D=satoshi@400,500,700,900&display=swap');
+
+:root {
+  --cv-page-bg: #F4EEE2;
+  --cv-sidebar-bg: #E8DCC4;
+  --cv-text: #6B6253;
+  --cv-heading: #2B2620;
+  --cv-primary: #36513C;
+  --cv-accent: #BC5C32;
+  --cv-date: #BC5C32;
+  --cv-muted: #97907F;
+  --cv-rule: #2B26202E;
+  --cv-link: #36513C;
+  --cv-link-hover: #BC5C32;
+  --cv-dot: #BC5C32;
+  --cv-dot-ring: #F4EEE2;
+  --cv-sidebar-text: #2B2620;
+  --cv-sidebar-heading: #36513C;
+  --cv-sidebar-label: #36513C;
+  --cv-sidebar-link: #2B2620;
+  --cv-sidebar-muted: #97907F;
+  --bb-forest: #36513C;
+  --bb-burnt: #BC5C32;
+  --bb-surface: #FBF7EE;
+
+  --cv-font-sans: "Satoshi", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cv-font-serif: "Spectral", Georgia, "Times New Roman", serif;
+
+  /* layout */
+  --cv-sidebar-width: 22rem;
+  --cv-main-max: 52rem;
+  --cv-date-w: 5.5rem;
+  --cv-deco-w: 1.75rem;
+  --cv-links-w: 8.5rem;
+  --cv-gutter: clamp(1rem, 4vw, 3rem);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--cv-page-bg);
+  color: var(--cv-text);
+  font-family: var(--cv-font-sans);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* The document title is only for <title>/PDF metadata; the CV header
+   (.cv-header) shows the name */
+#title-block-header {
+  display: none;
+}
+
+/* Quarto wraps the document in <main>; let the CV grid own the layout */
+main.content,
+#quarto-content,
+#quarto-document-content {
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+h1, h2, h3 {
+  margin: 0;
+  font-family: var(--cv-font-sans);
+  color: var(--cv-heading);
+  letter-spacing: -0.01em;
+}
+
+p {
+  margin: 0.25rem 0;
+}
+
+a {
+  color: var(--cv-link);
+  text-decoration: none;
+  text-underline-offset: 0.18em;
+}
+
+a:hover,
+a:focus-visible {
+  color: var(--cv-link-hover);
+  text-decoration: underline;
+}
+
+:focus-visible {
+  outline: 2px solid var(--cv-accent);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+u {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+}
+
+.cv-icon {
+  display: inline-block;
+  height: 1em;
+  vertical-align: -0.125em;
+  flex: none;
+}
+
+/* ---------------------------------------------------- page grid */
+
+.cv-page {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--cv-sidebar-width);
+  grid-template-areas: "main aside";
+  min-height: 100vh;
+}
+
+.cv-main {
+  grid-area: main;
+  width: 100%;
+  max-width: calc(var(--cv-main-max) + 2 * var(--cv-gutter));
+  margin: 0 auto;
+  padding: clamp(1.5rem, 5vw, 3.5rem) var(--cv-gutter) 4rem;
+}
+
+.cv-aside {
+  grid-area: aside;
+  background: var(--cv-sidebar-bg);
+  color: var(--cv-sidebar-text);
+  padding: 2.5rem 1.75rem;
+}
+
+/* On wide screens the sidebar stays in view while the timeline scrolls;
+   the band colour is painted on the grid so it runs the full page height. */
+@media (min-width: 64.01rem) {
+  .cv-page {
+    background: linear-gradient(
+      to left,
+      var(--cv-sidebar-bg) var(--cv-sidebar-width),
+      transparent var(--cv-sidebar-width)
+    );
+  }
+  .cv-aside {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    max-height: 100vh;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+}
+
+/* ------------------------------------------------------- header */
+
+.cv-header {
+  margin-bottom: 2.25rem;
+}
+
+.cv-name {
+  font-weight: 900;
+  font-size: clamp(2rem, 5vw, 2.9rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  text-transform: uppercase;
+}
+
+.cv-profile {
+  margin-top: 0.9rem;
+  max-width: 44rem;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.cv-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+}
+
+/* --------------------------------------------- buttons + links */
+
+.cv-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: 0.3em 0.8em;
+  border: 1px solid color-mix(in srgb, var(--cv-link) 35%, transparent);
+  border-radius: 999px;
+  color: var(--cv-link);
+  font-size: 0.8rem;
+  font-weight: 700;
+  line-height: 1.4;
+  white-space: nowrap;
+  transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.cv-button:hover,
+.cv-button:focus-visible {
+  background: var(--cv-link);
+  border-color: var(--cv-link);
+  color: var(--cv-page-bg);
+  text-decoration: none;
+}
+
+.cv-button-primary {
+  background: var(--cv-link);
+  border-color: var(--cv-link);
+  color: var(--cv-page-bg);
+}
+
+.cv-button-primary:hover,
+.cv-button-primary:focus-visible {
+  background: var(--cv-link-hover);
+  border-color: var(--cv-link-hover);
+  color: var(--cv-page-bg);
+}
+
+/* ------------------------------------------------------ sections */
+
+.cv-section {
+  margin-top: 2.5rem;
+}
+
+.cv-section-title {
+  display: grid;
+  grid-template-columns: var(--cv-date-w) var(--cv-deco-w) minmax(0, 1fr);
+  align-items: center;
+  margin-bottom: 0.35rem;
+  color: var(--cv-primary);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+}
+
+.cv-section-title .cv-icon {
+  grid-column: 2;
+  justify-self: center;
+  height: 1.05em;
+  /* sit on the timeline: the page background masks the line behind it */
+  background: var(--cv-page-bg);
+  box-shadow: 0 0 0 4px var(--cv-page-bg);
+}
+
+.cv-section-title span {
+  grid-column: 3;
+  padding-left: 0.75rem;
+}
+
+/* -------------------------------------------- timeline entries */
+
+.cv-entry {
+  display: grid;
+  grid-template-columns: var(--cv-date-w) var(--cv-deco-w) minmax(0, 1fr) var(--cv-links-w);
+  grid-template-areas: "date deco details links";
+}
+
+.cv-date {
+  grid-area: date;
+  padding: 1.05rem 0.4rem 0 0;
+  color: var(--cv-date);
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.cv-date span {
+  display: block;
+}
+
+.cv-date span + span::before {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 0.85rem;
+  margin: 0.25rem auto;
+  background: var(--cv-muted);
+}
+
+.cv-decorator {
+  grid-area: deco;
+  position: relative;
+}
+
+.cv-decorator::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  border-left: 1px solid var(--cv-rule);
+}
+
+.cv-decorator::after {
+  content: "";
+  position: absolute;
+  top: 1.2rem;
+  left: 50%;
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 50%;
+  background: var(--cv-dot);
+  box-shadow: 0 0 0 2px var(--cv-dot-ring);
+  transform: translateX(-50%);
+}
+
+.cv-entry:hover .cv-decorator::after {
+  background: var(--cv-primary);
+}
+
+.cv-details {
+  grid-area: details;
+  padding: 0.95rem 0 0.85rem 0.75rem;
+}
+
+.cv-title {
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.cv-meta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.15rem 1rem;
+  margin-top: 0.2rem;
+}
+
+.cv-org {
+  flex: 1 1 18rem;
+}
+
+.cv-location {
+  flex: none;
+  color: var(--cv-muted);
+  font-size: 0.85rem;
+}
+
+.cv-body {
+  margin-top: 0.45rem;
+  font-size: 0.9rem;
+}
+
+.cv-body ul {
+  margin: 0.3rem 0;
+  padding-left: 1.1rem;
+}
+
+.cv-body li::marker {
+  color: var(--cv-accent);
+}
+
+/* serif italic accent for emphasised text (journal names, descriptions) */
+.cv-main em {
+  font-family: var(--cv-font-serif);
+  font-size: 1.04em;
+}
+
+.cv-links {
+  grid-area: links;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding: 0.95rem 0 0 1rem;
+}
+
+/* -------------------------------------------------------- sidebar */
+
+.cv-picture {
+  width: fit-content;
+  margin: 0 auto 1.75rem;
+  padding: 4px;
+  border-radius: 50%;
+  line-height: 0;
+  background: linear-gradient(to right, var(--bb-forest), var(--bb-burnt));
+  box-shadow: 0 16px 32px -16px rgba(35, 56, 39, 0.5);
+}
+
+#picture {
+  display: block;
+  width: 11rem;
+  height: 11rem;
+  object-fit: cover;
+  border: 4px solid var(--bb-surface);
+  border-radius: 50%;
+}
+
+.cv-block {
+  margin-top: 1.9rem;
+  font-size: 0.9rem;
+}
+
+.cv-block-title {
+  margin-bottom: 0.65rem;
+  color: var(--cv-sidebar-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.cv-block p {
+  margin: 0.3rem 0;
+  line-height: 1.45;
+}
+
+.cv-aside a {
+  color: var(--cv-sidebar-link);
+}
+
+.cv-aside a:hover {
+  color: var(--cv-link-hover);
+}
+
+.cv-item {
+  display: grid;
+  grid-template-columns: 1.25rem minmax(0, 1fr);
+  gap: 0.55rem;
+  align-items: baseline;
+  margin: 0.45rem 0;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.cv-item .cv-icon {
+  justify-self: center;
+  color: var(--cv-sidebar-label);
+}
+
+.cv-label {
+  color: var(--cv-sidebar-label);
+  font-weight: 700;
+}
+
+.cv-disclaimer {
+  margin-top: 2.5rem;
+  color: var(--cv-sidebar-muted);
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+/* ----------------------------------------------------- responsive */
+
+/* Tablet: sidebar moves below the header, entries keep the timeline */
+@media (max-width: 64rem) {
+  .cv-page {
+    display: flex;
+    flex-direction: column;
+  }
+  /* let header, sidebar and sections be ordered independently */
+  .cv-main {
+    display: contents;
+  }
+  .cv-header,
+  .cv-section {
+    width: 100%;
+    max-width: calc(var(--cv-main-max) + 2 * var(--cv-gutter));
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: var(--cv-gutter);
+    padding-right: var(--cv-gutter);
+  }
+  .cv-header {
+    order: 1;
+    padding-top: 2rem;
+    margin-bottom: 1.75rem;
+  }
+  .cv-aside {
+    order: 2;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1.2fr) minmax(0, 1fr);
+    grid-template-areas:
+      "picture contact skills"
+      "picture contact languages"
+      "disclaimer disclaimer disclaimer";
+    gap: 0 2rem;
+    align-items: start;
+    padding: 0.5rem var(--cv-gutter) 1.75rem;
+  }
+  .cv-picture {
+    grid-area: picture;
+    margin: 1.9rem 0 0;
+  }
+  #contact { grid-area: contact; }
+  #skills { grid-area: skills; }
+  #languages { grid-area: languages; }
+  #picture {
+    width: 8rem;
+    height: 8rem;
+  }
+  .cv-disclaimer {
+    grid-area: disclaimer;
+    margin-top: 1.25rem;
+  }
+  .cv-section {
+    order: 3;
+  }
+  .cv-section:last-of-type {
+    padding-bottom: 3rem;
+  }
+}
+
+/* Phone: links move under the entry text, narrower date column */
+@media (max-width: 40rem) {
+  :root {
+    --cv-date-w: 3.9rem;
+    --cv-deco-w: 1.1rem;
+  }
+  .cv-entry {
+    grid-template-columns: var(--cv-date-w) var(--cv-deco-w) minmax(0, 1fr);
+    grid-template-areas:
+      "date deco details"
+      ".    deco links";
+  }
+  .cv-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    padding: 0 0 0.9rem 0.75rem;
+    margin-top: -0.4rem;
+  }
+  .cv-date {
+    font-size: 0.68rem;
+    padding-right: 0.25rem;
+  }
+  .cv-aside {
+    display: block;
+  }
+  .cv-picture {
+    margin: 0 auto 1rem;
+  }
+  .cv-section-title {
+    font-size: 1.05rem;
+  }
+}
+
+/* ----------------------------------------------------------- print */
+
+/* The typeset PDF is the print version; this only tidies a browser print */
+@media print {
+  .cv-toolbar {
+    display: none;
+  }
+  .cv-aside {
+    position: static;
+    max-height: none;
+  }
+  .cv-entry {
+    break-inside: avoid;
+  }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

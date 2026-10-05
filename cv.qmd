@@ -1,0 +1,106 @@
+---
+title: "Benjamin Black - Curriculum Vitæ"
+author: "Benjamin Black"
+params:
+  author: "Benjamin Black"
+  picture: "assets/cv_portrait.jpg"
+---
+
+```{r}
+#| include: false
+
+cv_config <- yaml::read_yaml("config.yaml")
+
+# Load the section functions and the format-neutral Markdown helpers
+invisible(sapply(
+  list.files("R", pattern = "\\.R$", full.names = TRUE),
+  source
+))
+
+# ---- Visual theme selection (Ben Black brand) -------------------------------
+# Priority: CV_THEME env var > config.yaml `theme:` > "warm". The theme is
+# defined once in themes/themes.yml and handed to both outputs: a <style>
+# block of --cv-* tokens for HTML, and typst/_theme.typ for the PDF.
+cv_theme <- load_theme(cv_config)
+write_theme_typst(cv_theme)
+
+repo <- cv_config$cv_data_repo
+branch <- cv_config$cv_data_branch
+
+message("🚀 CV Rendering Started (theme: ", cv_theme$name, ")")
+message("📡 Data Source: ", repo, " (branch: ", branch, ")")
+message("📄 Fallback: Local files in ", cv_config$local_data_dir, "/ (if GitHub unavailable)")
+```
+
+```{r}
+#| output: asis
+
+# Print contents of all sections. Comment out sections you do not want to
+# include. `page_break_after` only affects the PDF.
+cat(
+  theme_css(cv_theme),
+  "::: cv-page",
+  "",
+
+  # ---- sidebar ----
+  "::: cv-aside",
+  cv_div("cv-picture", sprintf("![Portrait of %s](%s)", params$author, params$picture)),
+  contact_section(github_repo = repo, branch = branch),
+  skills_section(github_repo = repo, branch = branch),
+  languages_section(github_repo = repo, branch = branch),
+  disclaimer_section(text = NULL),
+  ":::",
+  "",
+
+  # ---- main column ----
+  "::: cv-main",
+  profil_section(
+    github_repo = repo,
+    branch = branch,
+    author = params$author,
+    toolbar = toolbar_section()
+  ),
+  education_section(
+    github_repo = repo,
+    branch = branch,
+    page_break_after = FALSE,
+    include_sections = c("thesis", "awards")
+  ),
+  experience_section(
+    github_repo = repo,
+    branch = branch,
+    page_break_after = FALSE,
+    use_bullets = FALSE,
+    reverse_order = FALSE,
+    max_entries = cv_config$max_entries$experience
+  ),
+  workshop_section(
+    github_repo = repo,
+    branch = branch,
+    page_break_after = FALSE
+  ),
+  awards_section(
+    github_repo = repo,
+    branch = branch,
+    page_break_after = FALSE
+  ),
+  articles_section(
+    github_repo = repo,
+    branch = branch,
+    page_break_after = FALSE,
+    max_entries = cv_config$max_entries$articles
+  ),
+  presentations_section(
+    github_repo = repo,
+    branch = branch,
+    page_break_after = FALSE,
+    max_entries = cv_config$max_entries$presentations
+  ),
+  # poster_section(github_repo = repo, branch = branch),
+  # packages_section(github_repo = repo, branch = branch),
+  ":::",
+  "",
+  ":::",
+  sep = "\n"
+)
+```

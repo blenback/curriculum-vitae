@@ -7,7 +7,7 @@ cv_data_branch: "main"
 
 # Visual theme (Ben Black brand). One of: warm | forest | subtle
 # Override at render time without editing this file via the CV_THEME env var,
-# e.g. CV_THEME=forest. See themes/<name>.css and README.
+# e.g. CV_THEME=forest. Themes are defined in themes/themes.yml (see README).
 theme: subtle
 
 # Local fallback settings

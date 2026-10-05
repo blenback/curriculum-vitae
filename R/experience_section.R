@@ -1,3 +1,6 @@
+#' @param use_bullets Split activities into one bullet per sentence; otherwise
+#'   they are shown as a single italic paragraph.
+#' @param reverse_order Reverse the order of the data file.
 experience_section <- function(
   github_repo = NULL,
   branch = "main",
@@ -8,124 +11,33 @@ experience_section <- function(
 ) {
   experience_data <- read_cv_data_remote(github_repo, "experience", branch)
 
-  # Convert to data frame
-  experience_df <- do.call(rbind, lapply(experience_data, as.data.frame))
-
   if (!is.null(max_entries)) {
-    experience_df <- head(experience_df, max_entries)
+    experience_data <- head(experience_data, max_entries)
+  }
+  if (reverse_order) {
+    experience_data <- rev(experience_data)
   }
 
-  if (use_bullets) {
-    # Use bullet points for activities
-    bullet_char <- "\u25CF\u00A0" # Large bullet + non-breaking space
-
-    experience_df$activities <- sapply(experience_df$activities, function(x) {
-      open_bullet <- paste0(bullet_char, x)
-      # Replace instances of '.' with bullet points
-      pattern_replacement <- paste0(". \n\n", bullet_char)
-      open_bullet <- gsub("\\.", pattern_replacement, open_bullet)
-      # Remove the last instance
-      final_pattern <- paste0("\\. \n\n", gsub("(\\W)", "\\\\\\1", bullet_char))
-      open_bullet <- stringi::stri_replace_last(
-        open_bullet,
-        replacement = ".",
-        regex = final_pattern
-      )
-      return(open_bullet)
-    })
-
-    # Create formatted text
-    if (reverse_order) {
-      # Reverse order - most recent first
-      formatted_text <- sapply(nrow(experience_df):1, function(i) {
-        paste0(
-          "### ",
-          experience_df[i, "position"],
-          "\n\n",
-          experience_df[i, "institute"],
-          "\n\n",
-          experience_df[i, "city"],
-          "\n\n",
-          experience_df[i, "start"],
-          " - ",
-          experience_df[i, "end"],
-          "\n\n",
-          "\n\n",
-          experience_df[i, "activities"],
-          "\n\n\n\n"
-        )
-      })
+  entries <- lapply(experience_data, function(x) {
+    activities <- clean_text(x$activities)
+    body <- if (is_blank(activities)) {
+      NULL
+    } else if (use_bullets) {
+      sentences <- strsplit(activities, "(?<=\\.)\\s+", perl = TRUE)[[1]]
+      paste0("- ", sentences, collapse = "\n")
     } else {
-      # Original order
-      formatted_text <- sapply(1:nrow(experience_df), function(i) {
-        paste0(
-          "### ",
-          experience_df[i, "position"],
-          "\n\n",
-          experience_df[i, "institute"],
-          "\n\n",
-          experience_df[i, "city"],
-          "\n\n",
-          experience_df[i, "start"],
-          " - ",
-          experience_df[i, "end"],
-          "\n\n",
-          "\n\n",
-          experience_df[i, "activities"],
-          "\n\n\n\n"
-        )
-      })
+      paste0("*", activities, "*")
     }
-  } else {
-    # Activities in italics without bullet points
-    if (reverse_order) {
-      formatted_text <- sapply(nrow(experience_df):1, function(i) {
-        paste0(
-          "### ",
-          experience_df[i, "position"],
-          "\n\n",
-          experience_df[i, "institute"],
-          "\n\n",
-          experience_df[i, "city"],
-          "\n\n",
-          experience_df[i, "start"],
-          " - ",
-          experience_df[i, "end"],
-          "\n\n",
-          "\n\n*",
-          experience_df[i, "activities"],
-          "*\n\n\n\n"
-        )
-      })
-    } else {
-      formatted_text <- sapply(1:nrow(experience_df), function(i) {
-        paste0(
-          "### ",
-          experience_df[i, "position"],
-          "\n\n",
-          experience_df[i, "institute"],
-          "\n\n",
-          experience_df[i, "city"],
-          "\n\n",
-          experience_df[i, "start"],
-          " - ",
-          experience_df[i, "end"],
-          "\n\n",
-          "\n\n*",
-          experience_df[i, "activities"],
-          "*\n\n\n\n"
-        )
-      })
-    }
-  }
 
-  # Return the result
-  if (page_break_after) {
-    c(
-      "## Professional Experience {data-icon=laptop .break-after-me}",
-      formatted_text
+    cv_entry(
+      title = x$position,
+      org = x$institute,
+      location = x$city,
+      start = x$start,
+      end = x$end,
+      body = body
     )
-  } else {
-    c("## Professional Experience {data-icon=laptop}", formatted_text)
-  }
+  })
+
+  cv_section("experience", "Professional Experience", "laptop", entries, page_break_after)
 }

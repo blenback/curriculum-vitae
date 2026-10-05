@@ -1,56 +1,23 @@
 awards_section <- function(
   github_repo = NULL,
   branch = "main",
-  page_break_after = FALSE,
-  colour = "#333333"
+  page_break_after = FALSE
 ) {
   awards_data <- read_cv_data_remote(github_repo, "awards", branch)
 
-  # Convert to data frame and reverse order
-  awards_df <- do.call(rbind, lapply(awards_data, as.data.frame))
-  awards_df <- awards_df[nrow(awards_df):1, ]
+  # Newest first
+  awards_data <- rev(awards_data)
 
-  # Create formatted Markdown strings
-  text <- mapply(
-    function(name, institute, city, date, description, url, link_type) {
-      paste0(
-        "### ",
-        name,
-        "\n\n",
-        institute,
-        "\n\n",
-        city,
-        "\n\n",
-        date,
-        "\n\n",
-        if (!is.na(description) && description != "") {
-          paste0("*", description, "*\n\n")
-        } else {
-          ""
-        },
-        "::: aside\n",
-        if (!is.na(url) && url != "") {
-          add_item_logo(url, type = link_type, colour)
-        } else {
-          ""
-        },
-        "\n:::\n\n\n\n"
-      )
-    },
-    awards_df$name,
-    awards_df$institute,
-    awards_df$city,
-    awards_df$date,
-    awards_df$description,
-    awards_df$url,
-    awards_df$link_type,
-    SIMPLIFY = TRUE,
-    USE.NAMES = FALSE
-  )
+  entries <- lapply(awards_data, function(x) {
+    cv_entry(
+      title = x$name,
+      org = x$institute,
+      location = x$city,
+      start = x$date,
+      body = if (!is_blank(x$description)) paste0("*", clean_text(x$description), "*"),
+      links = list(cv_typed_link(x$url, x$link_type))
+    )
+  })
 
-  if (page_break_after) {
-    c("## Grants & Funding {data-icon=trophy .break-after-me}", text)
-  } else {
-    c("## Grants & Funding  {data-icon=trophy}", text)
-  }
+  cv_section("grants", "Grants & Funding", "trophy", entries, page_break_after)
 }

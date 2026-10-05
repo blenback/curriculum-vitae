@@ -1,0 +1,101 @@
+# ============================================================
+# CV themes (Ben Black brand) -- single source of truth for BOTH
+# outputs. R/theme.R turns the selected theme into CSS custom
+# properties (--cv-<token>) for the HTML page and a Typst dictionary
+# (typst/_theme.typ, generated) for the PDF.
+#
+# Select with `theme:` in config.yaml or the CV_THEME env var.
+# Values are either a palette name or a literal hex colour
+# (#RRGGBB, or #RRGGBBAA for transparency).
+# ============================================================
+
+# Brand palette (constant across themes)
+palette:
+  cream:       "#F4EEE2"
+  cream-2:     "#EFE7D7"
+  surface:     "#FBF7EE"
+  ink:         "#2B2620"
+  ink-soft:    "#6B6253"
+  ink-faint:   "#97907F"
+  forest:      "#36513C"
+  forest-deep: "#233827"
+  olive:       "#6E7350"
+  sage:        "#97A083"
+  burnt:       "#BC5C32"
+  burnt-deep:  "#8E3F1E"
+  tan:         "#DAC6A0"
+  sand:        "#E8DCC4"
+
+# Brand fonts. The HTML page loads them from Google Fonts / Fontshare
+# (see styles/cv.css); the PDF needs them installed or in fonts/.
+fonts:
+  sans:  Satoshi
+  serif: Spectral
+  mono:  JetBrains Mono
+
+themes:
+  # Cream paper + warm sand sidebar, forest-green section titles,
+  # burnt-orange dates/dots/bullets. Mirrors the brand body area.
+  warm:
+    page-bg:         cream
+    sidebar-bg:      sand
+    text:            ink-soft
+    heading:         ink
+    primary:         forest
+    accent:          burnt
+    date:            burnt
+    muted:           ink-faint
+    rule:            "#2B26202E"
+    link:            forest
+    link-hover:      burnt
+    dot:             burnt
+    dot-ring:        cream
+    sidebar-text:    ink
+    sidebar-heading: forest
+    sidebar-label:   forest
+    sidebar-link:    ink
+    sidebar-muted:   ink-faint
+
+  # Cream main column + deep forest-green sidebar with cream/tan
+  # text -- mirrors the website footer. High contrast.
+  forest:
+    page-bg:         cream
+    sidebar-bg:      forest-deep
+    text:            ink-soft
+    heading:         ink
+    primary:         forest
+    accent:          burnt
+    date:            burnt
+    muted:           ink-faint
+    rule:            "#2B26202E"
+    link:            forest
+    link-hover:      burnt-deep
+    dot:             burnt
+    dot-ring:        cream
+    sidebar-text:    "#DBE0DC"
+    sidebar-heading: "#FFFFFF"
+    sidebar-label:   tan
+    sidebar-link:    tan
+    sidebar-muted:   "#A5B1A7"
+
+  # Near-white warm paper, very light sidebar. Keeps the brand fonts
+  # + forest/burnt accents but uses the least ink when printed.
+  subtle:
+    page-bg:         "#FCFBF7"
+    sidebar-bg:      "#F3EFE6"
+    text:            ink-soft
+    heading:         ink
+    primary:         forest
+    accent:          burnt
+    date:            forest
+    muted:           ink-faint
+    rule:            "#2B262024"
+    link:            forest
+    link-hover:      burnt
+    dot:             forest
+    dot-ring:        "#FCFBF7"
+    sidebar-text:    ink
+    sidebar-heading: forest
+    sidebar-label:   forest
+    sidebar-link:    ink
+    sidebar-muted:   ink-faint
